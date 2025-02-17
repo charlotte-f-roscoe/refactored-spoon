@@ -38,10 +38,12 @@ app.use(cors({
 
 // Session middleware
 app.use(session({
-    secret: 'superAwesomeSecretKey',
+    secret: "superAwesomeSecretKey",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: true, sameSite: "none" } 
 }));
+
 
 // Passport middleware
 app.use(passport.initialize());
