@@ -4,6 +4,7 @@ const Task = require("../models/Task");
 
 // Ensure user is authenticated
 function ensureAuthenticated(req, res, next) {
+    console.log("User authentication check:", req.isAuthenticated());
     if (req.isAuthenticated()) {
         return next();
     }
