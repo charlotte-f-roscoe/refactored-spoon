@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+const navigate = useNavigate();
 
 const API_URL = process.env.REACT_APP_API_URL
 
@@ -14,7 +17,7 @@ const Login = () => {
         try {
             const res = await axios.post(`${API_URL}/api/auth/login`, { username, password }, { withCredentials: true });
             console.log("Login successful:", res.data);
-            window.location.href = "/dashboard";
+            navigate("/dashboard");
         } catch (err) {
             console.error("Login failed:", err.response ? err.response.data : err.message);
             setError("Invalid username or password.");
