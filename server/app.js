@@ -30,9 +30,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // CORS
+const allowedOrigins = ["https://refactored-spoon-bpck.onrender.com"];
 app.use(cors({
     origin: allowedOrigins,
-    credentials: true // Allow cookies if needed
+    credentials: true 
 }));
 
 // Session middleware
