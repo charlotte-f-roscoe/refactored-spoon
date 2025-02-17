@@ -30,7 +30,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // CORS
-app.use(cors());
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true // Allow cookies if needed
+}));
 
 // Session middleware
 app.use(session({
