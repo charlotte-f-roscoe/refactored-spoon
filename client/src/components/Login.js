@@ -10,7 +10,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("login request being sent");
+        console.log("Login request being sent to:", `${API_URL}/api/auth/login`);
         try {
             const res = await axios.post(`${API_URL}/api/auth/login`, { username, password }, { withCredentials: true });
             console.log("Login successful:", res.data);
