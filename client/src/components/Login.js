@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL
+
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -10,7 +12,7 @@ const Login = () => {
         e.preventDefault();
         console.log("login request being sent");
         try {
-            const res = await axios.post("/api/auth/login", { username, password }, { withCredentials: true });
+            const res = await axios.post(`${API_URL}/api/auth/login`, { username, password }, { withCredentials: true });
             console.log("Login successful:", res.data);
             window.location.href = "/dashboard";
         } catch (err) {
