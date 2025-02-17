@@ -13,7 +13,7 @@ const Dashboard = () => {
 
     // load tasks
     useEffect(() => {
-        axios.get(`${API_URL}/api/tasks`, { withCredentials: true })
+        axios.get("/api/tasks", { withCredentials: true })
             .then(res => setTasks(res.data))
             .catch(err => console.error("error fetching tasks:", err));
     }, []);
@@ -32,7 +32,7 @@ const Dashboard = () => {
         try {
             if (editingTask) {
                 // Update task
-                await axios.put(`${API_URL}/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
+                await axios.put(`$/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
                 setTasks(tasks.map(task => task._id === editingTask ? { ...task, description, priority, startDate } : task));
             } else {
                 // Add new task
@@ -52,7 +52,7 @@ const Dashboard = () => {
     // handle task deletion
     const handleDeleteTask = async (id) => {
         try {
-            await axios.delete(`${API_URL}/api/tasks/${id}`, { withCredentials: true });
+            await axios.delete(`$/api/tasks/${id}`, { withCredentials: true });
             setTasks(tasks.filter(task => task._id !== id));
         } catch (err) {
             console.error("error deleting task:", err);
@@ -62,7 +62,7 @@ const Dashboard = () => {
     const handleUpdateTask = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.put(`${API_URL}/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
+            const res = await axios.put(`/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
 
             setTasks(tasks.map(task => task._id === editingTask ? res.data : task));
             setEditingTask(null);
@@ -78,7 +78,7 @@ const Dashboard = () => {
     // handle logout
     const handleLogout = async () => {
         try {
-            await axios.get(`${API_URL}/api/auth/logout`, { withCredentials: true });
+            await axios.get("/api/auth/logout", { withCredentials: true });
             window.location.href = "/";
         } catch (err) {
             console.error("logout failed:", err);
