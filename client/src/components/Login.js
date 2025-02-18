@@ -38,7 +38,7 @@ const Login = () => {
 
             <hr/>
             <p>Or log in with GitHub:</p>
-            <a href={"https://refactored-spoon-bpck.onrender.com/api/auth/github"} className="btn btn-dark">GitHub</a>
+            <a href={"https://a4-charlotte-f-roscoe-backend.onrender.com/api/auth/github"} className="btn btn-dark">GitHub</a>
         </div>
     );
 };
