@@ -5,7 +5,6 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-const MongoStore = require("connect-mongo");
 
 
 const app = express();
@@ -31,13 +30,17 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // CORS
-const allowedOrigins = ["https://refactored-spoon-bpck.onrender.com"];
+const allowedOrigins = [
+    "https://refactored-spoon-bpck.onrender.com",
+    "https://a4-charlotte-f-roscoe-backend.onrender.com" ];
+
 app.use(cors({
     origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
+app.set("trust proxy", 1);
 
 
 // Session middleware
@@ -45,11 +48,11 @@ app.use(session({
     secret: "superAwesomeSecretKey",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }), // ✅ Store in MongoDB
+    proxy: true,
     cookie: {
-        secure: false,
-        httpOnly: true,
-        sameSite: "lax"
+        secure: true,
+        sameSite: "none",
+        httpOnly: true
     }
 }));
 
