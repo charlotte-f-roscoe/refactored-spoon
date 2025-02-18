@@ -12,10 +12,28 @@ const Dashboard = () => {
     const [startDate, setStartDate] = useState("");
 
     // load tasks
+    /*
     useEffect(() => {
         axios.get(`${API_URL}/api/tasks`, { withCredentials: true })
             .then(res => setTasks(res.data))
             .catch(err => console.error("error fetching tasks:", err));
+    }, []);
+     */
+
+    useEffect(() => {
+        console.log("fetching tasks from:", `${API_URL}/api/tasks`);
+
+        axios.get(`${API_URL}/api/tasks`, {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(res => {
+                console.log("Received tasks:", res.data);
+                setTasks(res.data);
+            })
+            .catch(err => {
+                console.error("Error fetching tasks:", err.response ? err.response.data : err.message);
+            });
     }, []);
 
     // handle edit button click

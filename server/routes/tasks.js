@@ -57,7 +57,10 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
 });
 
 //  Get all tasks
-router.get("/", ensureAuthenticated, async (req, res) => {
+router.get("/", (req, res, next) => {
+    console.log("GET /api/tasks was called");
+    next(); // Move to next middleware (ensureAuthenticated)
+}, ensureAuthenticated, async (req, res) => {
     try {
         const tasks = await Task.find({ user: req.user._id }).sort({ createdAt: -1 });
         res.json(tasks);
