@@ -26,8 +26,9 @@ router.get('/github', passport.authenticate('github'));
 router.get('/github/callback',
     passport.authenticate('github', { failureRedirect: '/' }),
     (req, res) => {
-        console.log("GitHub authentication successful. Redirecting to dashboard...");
-        res.redirect('/dashboard');
+        console.log("GitHub login successful for:", req.user);
+        console.log(`Redirecting to: ${process.env.FRONTEND_URL}/dashboard`);
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard`); // Redirect to frontend, not backend
     }
 );
 

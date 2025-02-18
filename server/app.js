@@ -70,12 +70,17 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
 // Serve React Frontend
+// Serve React Frontend (for production)
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../client/build")));
+
+    // This ensures React handles all unknown routes
     app.get("*", (req, res) => {
+        console.log(`Frontend route request: ${req.url}`); // Debugging log
         res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
     });
 }
+
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
