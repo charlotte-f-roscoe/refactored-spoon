@@ -39,6 +39,8 @@ const Dashboard = () => {
 
     // handle edit button click
     const handleEditClick = (task) => {
+        console.log("Edit button clicked for task:", task);
+
         if (!task || !task.startDate) {
             console.error("Invalid task object for editing:", task);
             return;
@@ -46,8 +48,9 @@ const Dashboard = () => {
         setEditingTask(task._id);
         setDescription(task.description || "");
         setPriority(task.priority || "Medium");
-        setStartDate(task.startDate ? task.startDate.split("T")[0] : ""); // Prevent crash
+        setStartDate(task.startDate ? task.startDate.split("T")[0] : "");
     };
+
 
 
     // handle form submit
@@ -90,8 +93,20 @@ const Dashboard = () => {
 
     const handleUpdateTask = async (e) => {
         e.preventDefault();
+        console.log("Attempting to update task:", editingTask, { description, priority, startDate });
+
+        if (!editingTask) {
+            console.error("No task selected for updating.");
+            return;
+        }
+
         try {
-            const res = await axios.put(`/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
+            const res = await axios.put(`${API_URL}/api/tasks/${editingTask}`,
+                { description, priority, startDate },
+                { withCredentials: true }
+            );
+
+            console.log("Update successful. Updated task data:", res.data);
 
             setTasks(tasks.map(task => task._id === editingTask ? res.data : task));
             setEditingTask(null);
@@ -99,9 +114,11 @@ const Dashboard = () => {
             setPriority("Medium");
             setStartDate("");
         } catch (err) {
-            console.error("error updating task:", err);
+            console.error("Error updating task:", err.response ? err.response.data : err.message);
         }
     };
+
+
 
 
     // handle logout
@@ -134,7 +151,9 @@ const Dashboard = () => {
                             <option value="Low">Low</option>
                         </select>
                         <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
-                        <button type="submit">{editingTask ? "Update Task" : "Add Task"}</button>
+                        <button type="submit" onClick={() => console.log("Update button clicked")}>
+                            {editingTask ? "Update Task" : "Add Task"}
+                        </button>
                         {}
                         {editingTask && <button type="button"
                                                 onClick={() => setEditingTask(null)}>Cancel</button>}
@@ -148,7 +167,7 @@ const Dashboard = () => {
                 <ul>
                     {tasks.map(task => (
                         <li key={task._id}>
-                            {task.description} - {task.priority} - Deadline: {new Date(task.deadline).toLocaleDateString()}
+                            {task.description} - {task.priority} - Deadline: {task.deadline ? new Date(task.deadline).toLocaleDateString() : "No deadline"}
                             <button onClick={() => handleEditClick(task)}>Edit</button>
                             <button onClick={() => handleDeleteTask(task._id)}>Delete</button>
                         </li>

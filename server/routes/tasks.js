@@ -32,6 +32,8 @@ function calculateDeadline(startDate, priority) {
 //  Edit task
 router.put("/:id", ensureAuthenticated, async (req, res) => {
     try {
+        console.log("Update request received for task:", req.params.id, "with data:", req.body);
+
         const { description, priority, startDate } = req.body;
         const task = await Task.findOne({ _id: req.params.id, user: req.user._id });
 
@@ -39,22 +41,22 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
             return res.status(404).json({ error: "Task not found" });
         }
 
-        // Update only the fields that were changed
         if (description) task.description = description;
         if (priority) task.priority = priority;
-        if (startDate) task.startDate = startDate;
-
-        //  Recalculate deadline if startDate or priority is updated
-        if (startDate || priority) {
-            task.deadline = calculateDeadline(startDate || task.startDate, priority || task.priority);
+        if (startDate) {
+            task.startDate = startDate;
+            task.deadline = calculateDeadline(startDate, priority || task.priority);
         }
 
         await task.save();
+        console.log("Task successfully updated:", task);
         res.json(task);
     } catch (err) {
+        console.error("Error updating task:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
+
 
 //  Get all tasks
 router.get("/", (req, res, next) => {
