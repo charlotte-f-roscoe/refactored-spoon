@@ -22,20 +22,27 @@ const Dashboard = () => {
      */
 
     useEffect(() => {
-        console.log("fetching tasks from:", `${API_URL}/api/tasks`);
+        console.log("Fetching tasks from:", `${API_URL}/api/tasks`);
 
         axios.get(`${API_URL}/api/tasks`, {
             withCredentials: true,
             headers: { "Content-Type": "application/json" }
         })
             .then(res => {
-                console.log("Received tasks:", res.data);
-                setTasks(res.data);
+                console.log("Received tasks:", res.data); // Log the response data
+                if (Array.isArray(res.data)) {
+                    setTasks(res.data);
+                } else {
+                    console.error("Unexpected response format:", res.data);
+                    setTasks([]); // Ensure tasks is always an array
+                }
             })
             .catch(err => {
                 console.error("Error fetching tasks:", err.response ? err.response.data : err.message);
+                setTasks([]); // Prevent crash
             });
     }, []);
+
 
     // handle edit button click
     const handleEditClick = (task) => {
@@ -161,19 +168,20 @@ const Dashboard = () => {
                 </div>
             </div>
             <h3>Your Tasks</h3>
-            {tasks.length === 0 ? (
-                <p>No tasks found.</p>
-            ) : (
+            {tasks && tasks.length > 0 ? (
                 <ul>
                     {tasks.map(task => (
                         <li key={task._id}>
-                            {task.description} - {task.priority} - Deadline: {task.deadline ? new Date(task.deadline).toLocaleDateString() : "No deadline"}
+                            {task.description} - {task.priority} - Deadline: {new Date(task.deadline).toLocaleDateString()}
                             <button onClick={() => handleEditClick(task)}>Edit</button>
                             <button onClick={() => handleDeleteTask(task._id)}>Delete</button>
                         </li>
                     ))}
                 </ul>
+            ) : (
+                <p>No tasks found.</p>
             )}
+
         </div>
     );
 };

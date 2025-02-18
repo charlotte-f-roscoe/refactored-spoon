@@ -65,7 +65,8 @@ router.get("/", (req, res, next) => {
 }, ensureAuthenticated, async (req, res) => {
     try {
         const tasks = await Task.find({ user: req.user._id }).sort({ createdAt: -1 });
-        res.json(tasks);
+        console.log("Sending tasks response:", tasks);
+        res.json(Array.isArray(tasks) ? tasks : []); // Ensure array
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
