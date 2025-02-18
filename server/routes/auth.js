@@ -27,7 +27,7 @@ router.get('/github/callback',
     passport.authenticate('github', { failureRedirect: '/' }),
     (req, res) => {
         console.log("GitHub authentication successful. Redirecting to dashboard...");
-        res.redirect("https://refactored-spoon-bpck.onrender.com/dashboard");
+        res.redirect('/dashboard');
     }
 );
 
