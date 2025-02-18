@@ -39,11 +39,16 @@ const Dashboard = () => {
 
     // handle edit button click
     const handleEditClick = (task) => {
+        if (!task || !task.startDate) {
+            console.error("Invalid task object for editing:", task);
+            return;
+        }
         setEditingTask(task._id);
-        setDescription(task.description);
-        setPriority(task.priority);
-        setStartDate(task.startDate.split("T")[0]); // Format date correctly
+        setDescription(task.description || "");
+        setPriority(task.priority || "Medium");
+        setStartDate(task.startDate ? task.startDate.split("T")[0] : ""); // Prevent crash
     };
+
 
     // handle form submit
     const handleSubmit = async (e) => {
@@ -70,11 +75,16 @@ const Dashboard = () => {
 
     // handle task deletion
     const handleDeleteTask = async (id) => {
+        if (!id) {
+            console.error("Task ID is undefined. Cannot delete.");
+            return;
+        }
+
         try {
             await axios.delete(`${API_URL}/api/tasks/${id}`, { withCredentials: true });
             setTasks(tasks.filter(task => task._id !== id));
         } catch (err) {
-            console.error("error deleting task:", err);
+            console.error("Error deleting task:", err.response ? err.response.data : err.message);
         }
     };
 
@@ -97,12 +107,14 @@ const Dashboard = () => {
     // handle logout
     const handleLogout = async () => {
         try {
-            await axios.get("/api/auth/logout", { withCredentials: true });
+            console.log("Logging out from:", `${API_URL}/api/auth/logout`);
+            await axios.get(`${API_URL}/api/auth/logout`, { withCredentials: true });
             window.location.href = "/";
         } catch (err) {
-            console.error("logout failed:", err);
+            console.error("Logout failed:", err.response ? err.response.data : err.message);
         }
     };
+
 
     return (
         <div className="container mt-4">

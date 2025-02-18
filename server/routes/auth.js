@@ -32,15 +32,22 @@ router.get('/github/callback',
 
 // Logout 
 router.get('/logout', (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ error: "User not logged in" });
+    }
+
     req.logout((err) => {
         if (err) {
+            console.error("Logout error:", err);
             return res.status(500).json({ error: "Logout failed" });
         }
         req.session.destroy(() => {
-            res.clearCookie("connect.sid");
+            res.clearCookie("connect.sid", { path: "/" });
+            console.log("User successfully logged out.");
             res.json({ message: "Logged out successfully" });
         });
     });
 });
+
 
 module.exports = router;
