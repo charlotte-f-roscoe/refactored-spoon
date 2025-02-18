@@ -13,7 +13,7 @@ const Dashboard = () => {
 
     // load tasks
     useEffect(() => {
-        axios.get("/api/tasks", { withCredentials: true })
+        axios.get(`${API_URL}/api/tasks`, { withCredentials: true })
             .then(res => setTasks(res.data))
             .catch(err => console.error("error fetching tasks:", err));
     }, []);
@@ -32,7 +32,7 @@ const Dashboard = () => {
         try {
             if (editingTask) {
                 // Update task
-                await axios.put(`$/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
+                await axios.put(`${API_URL}/api/tasks/${editingTask}`, { description, priority, startDate }, { withCredentials: true });
                 setTasks(tasks.map(task => task._id === editingTask ? { ...task, description, priority, startDate } : task));
             } else {
                 // Add new task
@@ -52,7 +52,7 @@ const Dashboard = () => {
     // handle task deletion
     const handleDeleteTask = async (id) => {
         try {
-            await axios.delete(`$/api/tasks/${id}`, { withCredentials: true });
+            await axios.delete(`${API_URL}/api/tasks/${id}`, { withCredentials: true });
             setTasks(tasks.filter(task => task._id !== id));
         } catch (err) {
             console.error("error deleting task:", err);

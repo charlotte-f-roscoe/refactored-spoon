@@ -6,6 +6,7 @@ const Task = require("../models/Task");
 function ensureAuthenticated(req, res, next) {
     console.log("User authentication check:", req.isAuthenticated());
     if (req.isAuthenticated()) {
+        console.log("User authentication successful");
         return next();
     }
     res.status(401).json({ error: "Unauthorized!!" });
