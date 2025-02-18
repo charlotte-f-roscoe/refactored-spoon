@@ -11,6 +11,8 @@ const app = express();
 
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    console.log("Session data:", req.session);
+    console.log("User data:", req.user);
     next();
 });
 
@@ -77,7 +79,7 @@ if (process.env.NODE_ENV === "production") {
     // This ensures React handles all unknown routes
     app.get("*", (req, res) => {
         console.log(`Frontend route request: ${req.url}`); // Debugging log
-        res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+        res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
     });
 }
 

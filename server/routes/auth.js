@@ -24,10 +24,13 @@ router.post('/login', (req, res, next) => {
 // GitHub Authentication
 router.get('/github', passport.authenticate('github'));
 router.get('/github/callback',
+    (req, res, next) => {
+        console.log("Incoming request to /github/callback"); // <== Log this
+        next();
+    },
     passport.authenticate('github', { failureRedirect: '/' }),
     (req, res) => {
         console.log("GitHub login successful for:", req.user);
-        console.log(`Redirecting to: ${process.env.FRONTEND_URL}/dashboard`);
         res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
     }
 );

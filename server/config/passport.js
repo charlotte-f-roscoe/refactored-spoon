@@ -45,25 +45,25 @@ module.exports = function(passport) {
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
             callbackURL: process.env.GITHUB_CALLBACK_URL
         },
-        function(accessToken, refreshToken, profile, done) {
+        function (accessToken, refreshToken, profile, done) {
+            console.log("GitHub Profile Data:", profile); // <== Debugging log
             (async () => {
                 try {
                     let user = await User.findOne({ githubId: profile.id });
-                    if (user) {
-                        return done(null, user);
-                    } else {
-                        const newUser = new User({
+                    if (!user) {
+                        console.log("New user created:", profile.username);
+                        user = new User({
                             username: profile.username,
-                            githubId: profile.id,
-                            password: 'github' // Placeholder value
+                            githubId: profile.id
                         });
-                        await newUser.save();
-                        return done(null, newUser);
+                        await user.save();
                     }
+                    return done(null, user);
                 } catch (err) {
                     return done(err);
                 }
             })();
         }
     ));
+
 };
