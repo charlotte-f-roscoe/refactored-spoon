@@ -9,13 +9,6 @@ const cors = require('cors');
 
 const app = express();
 
-app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    console.log("Session data:", req.session);
-    console.log("User data:", req.user);
-    next();
-});
-
 
 // Load environment variables
 require('dotenv').config();
@@ -70,6 +63,13 @@ const taskRoutes = require('./routes/tasks');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    console.log("Session data:", req.session);
+    console.log("User data:", req.user);
+    next();
+});
 
 // Serve React Frontend
 // Serve React Frontend (for production)
