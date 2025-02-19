@@ -29,17 +29,17 @@ const Dashboard = () => {
             headers: { "Content-Type": "application/json" }
         })
             .then(res => {
-                console.log("Received tasks:", res.data); // Log the response data
+                console.log("Received tasks:", res.data);
                 if (Array.isArray(res.data)) {
                     setTasks(res.data);
                 } else {
                     console.error("Unexpected response format:", res.data);
-                    setTasks([]); // Ensure tasks is always an array
+                    setTasks([]);
                 }
             })
             .catch(err => {
                 console.error("Error fetching tasks:", err.response ? err.response.data : err.message);
-                setTasks([]); // Prevent crash
+                setTasks([]);
             });
     }, []);
 

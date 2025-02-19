@@ -61,12 +61,12 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
 //  Get all tasks
 router.get("/", (req, res, next) => {
     console.log("GET /api/tasks was called");
-    next(); // Move to next middleware (ensureAuthenticated)
+    next();
 }, ensureAuthenticated, async (req, res) => {
     try {
         const tasks = await Task.find({ user: req.user._id }).sort({ createdAt: -1 });
         console.log("Sending tasks response:", tasks);
-        res.json(Array.isArray(tasks) ? tasks : []); // Ensure array
+        res.json(Array.isArray(tasks) ? tasks : []);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

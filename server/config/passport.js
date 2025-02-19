@@ -46,7 +46,7 @@ module.exports = function(passport) {
             callbackURL: process.env.GITHUB_CALLBACK_URL
         },
         function (accessToken, refreshToken, profile, done) {
-            console.log("GitHub Profile Data:", profile); // <== Debugging log
+            console.log("GitHub Profile Data:", profile);
             (async () => {
                 try {
                     let user = await User.findOne({ githubId: profile.id });

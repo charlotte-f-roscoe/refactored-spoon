@@ -72,11 +72,9 @@ app.use((req, res, next) => {
 });
 
 // Serve React Frontend
-// Serve React Frontend (for production)
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../client/build")));
 
-    // This ensures React handles all unknown routes
     app.get("*", (req, res) => {
         console.log(`Frontend route request: ${req.url}`); // Debugging log
         res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
